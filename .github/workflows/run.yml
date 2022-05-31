@@ -1,0 +1,36 @@
+name: 签到
+
+on:
+  schedule:
+    - cron: '7 0,2,10 * * *'
+  # 支持手动运行
+  workflow_dispatch:
+  # push:
+    # branches: [ master ]
+  # pull_request:
+    # branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm包安装
+        run: npm ci
+
+      - name: 开始
+        run: |
+          passwd=${{ secrets.TG_PAASWORD }}
+          mailpasswd=${{ secrets.MAIL_PASSWORD }}
+          node index.js ${passwd} ${mailpasswd}
