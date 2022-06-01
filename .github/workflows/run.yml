@@ -2,7 +2,8 @@ name: 签到
 
 on:
   schedule:
-    - cron: '0 0,2,8 * * *'
+    - cron: '0 0,3 * * *'
+    - cron: '0 8 * * *'
   # 支持手动运行
   workflow_dispatch:
   # push:
